@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuva世界 - 隱藏傳送門</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        body {
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            overflow-x: hidden;
+        }
+        
+        .glitch {
+            animation: glitch 2s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+        
+        .neon-border {
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 10px #00ffff, inset 0 0 10px rgba(0, 255, 255, 0.1);
+        }
+        
+        .rust-texture {
+            background: linear-gradient(45deg, #8B4513 0%, #A0522D 25%, #CD853F 50%, #8B4513 75%, #654321 100%);
+            background-size: 20px 20px;
+        }
+        
+        .hologram {
+            background: linear-gradient(45deg, transparent 30%, rgba(0, 255, 255, 0.1) 50%, transparent 70%);
+            animation: hologram 3s infinite;
+        }
+        
+        @keyframes hologram {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        .typing {
+            border-right: 2px solid #00ffff;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { border-color: #00ffff; }
+            51%, 100% { border-color: transparent; }
+        }
+        
+        .success-glow {
+            animation: successGlow 2s ease-in-out;
+        }
+        
+        @keyframes successGlow {
+            0% { box-shadow: 0 0 5px #00ff00; }
+            50% { box-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00; }
+            100% { box-shadow: 0 0 5px #00ff00; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <!-- Background Effects -->
+    <div class="fixed inset-0 opacity-20">
+        <div class="absolute top-10 left-10 w-32 h-32 rust-texture rounded-full"></div>
+        <div class="absolute bottom-20 right-20 w-24 h-24 rust-texture rounded-lg rotate-45"></div>
+        <div class="absolute top-1/2 left-1/4 w-16 h-16 rust-texture rounded-full"></div>
+    </div>
+    
+    <!-- Holographic Grid -->
+    <div class="fixed inset-0 opacity-10 hologram" style="background-image: linear-gradient(rgba(0,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,255,0.1) 1px, transparent 1px); background-size: 50px 50px;"></div>
+    
+    <!-- Main Container -->
+    <div class="relative z-10 max-w-2xl w-full">
+        <!-- Portal Effect -->
+        <div class="absolute -top-20 left-1/2 transform -translate-x-1/2 w-32 h-32 rounded-full neon-border glitch opacity-60"></div>
+        
+        <!-- Main Panel -->
+        <div class="bg-gray-900 bg-opacity-90 neon-border rounded-lg p-8 backdrop-blur-sm">
+            <!-- Title -->
+            <h1 class="text-3xl font-bold text-cyan-400 text-center mb-8 glitch">
+                NUVA 世界傳送門
+            </h1>
+            
+            <!-- Dialogue Box -->
+            <div class="bg-black bg-opacity-60 border border-cyan-500 rounded-lg p-6 mb-8">
+                <div class="text-cyan-300 leading-relaxed" id="dialogue">
+                    <p class="mb-4">你好，你發現了隱藏的傳送門，現在nuva世界出現了異狀，我們需要勇者。</p>
+                    <p>但你必須要先答出下面的問題，我們才能確保你具備成為勇者的特質。</p>
+                </div>
+            </div>
+            
+            <!-- Form -->
+            <div class="space-y-6">
+                <!-- Student ID Input -->
+                <div>
+                    <label class="block text-cyan-400 font-semibold mb-2">
+                        首先請先輸入你的學號（見習勇者編號）
+                    </label>
+                    <input 
+                        type="text" 
+                        id="studentId" 
+                        class="w-full bg-gray-800 border border-cyan-500 rounded px-4 py-3 text-cyan-300 focus:outline-none focus:border-cyan-400 focus:shadow-lg transition-all"
+                        placeholder="輸入學號..."
+                    >
+                </div>
+                
+                <!-- Question -->
+                <div>
+                    <label class="block text-cyan-400 font-semibold mb-2">
+                        n8n中，最常見的節點可以分為哪兩大類？（請輸入英文）
+                    </label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <input 
+                            type="text" 
+                            id="answer1" 
+                            class="bg-gray-800 border border-cyan-500 rounded px-4 py-3 text-cyan-300 focus:outline-none focus:border-cyan-400 focus:shadow-lg transition-all"
+                            placeholder="第一類..."
+                        >
+                        <input 
+                            type="text" 
+                            id="answer2" 
+                            class="bg-gray-800 border border-cyan-500 rounded px-4 py-3 text-cyan-300 focus:outline-none focus:border-cyan-400 focus:shadow-lg transition-all"
+                            placeholder="第二類..."
+                        >
+                    </div>
+                </div>
+                
+                <!-- Submit Button -->
+                <button 
+                    onclick="checkAnswers()" 
+                    class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-6 rounded neon-border transition-all duration-300 transform hover:scale-105"
+                >
+                    驗證勇者資格
+                </button>
+                
+                <!-- Result Area -->
+                <div id="result" class="hidden mt-6 p-4 rounded-lg"></div>
+            </div>
+        </div>
+        
+        <!-- Floating Particles -->
+        <div class="absolute top-0 left-0 w-2 h-2 bg-cyan-400 rounded-full opacity-60 animate-ping" style="animation-delay: 0s;"></div>
+        <div class="absolute top-20 right-10 w-1 h-1 bg-cyan-400 rounded-full opacity-60 animate-ping" style="animation-delay: 1s;"></div>
+        <div class="absolute bottom-10 left-20 w-1 h-1 bg-cyan-400 rounded-full opacity-60 animate-ping" style="animation-delay: 2s;"></div>
+    </div>
+
+    <script>
+        function checkAnswers() {
+            const studentId = document.getElementById('studentId').value.trim();
+            const answer1 = document.getElementById('answer1').value.trim().toLowerCase();
+            const answer2 = document.getElementById('answer2').value.trim().toLowerCase();
+            const resultDiv = document.getElementById('result');
+            
+            // Check if student ID is provided
+            if (!studentId) {
+                showResult('請先輸入你的學號（見習勇者編號）！', 'error');
+                return;
+            }
+            
+            // Check if both answers are provided
+            if (!answer1 || !answer2) {
+                showResult('請回答兩個節點類型！', 'error');
+                return;
+            }
+            
+            // Check answers (trigger and action, case insensitive, order doesn't matter)
+            const correctAnswers = ['trigger', 'action'];
+            const userAnswers = [answer1, answer2];
+            
+            const isCorrect = correctAnswers.every(correct => 
+                userAnswers.some(user => user === correct)
+            ) && userAnswers.every(user => 
+                correctAnswers.some(correct => correct === user)
+            );
+            
+            if (isCorrect) {
+                const password = studentId + '3771';
+                showResult(`🎉 恭喜！你已通過勇者資格驗證！<br><br>✨ 通往下一關的密碼：<span class="text-yellow-400 font-bold text-xl">${password}</span><br><br>準備好迎接挑戰了嗎，勇者？`, 'success');
+            } else {
+                showResult('❌ 答案不正確，請重新思考 n8n 的兩大節點類型...', 'error');
+            }
+        }
+        
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = message;
+            resultDiv.className = `mt-6 p-4 rounded-lg border-2 ${type === 'success' ? 'bg-green-900 bg-opacity-50 border-green-400 text-green-300 success-glow' : 'bg-red-900 bg-opacity-50 border-red-400 text-red-300'}`;
+            resultDiv.classList.remove('hidden');
+            
+            // Scroll to result
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        // Add enter key support
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkAnswers();
+            }
+        });
+        
+        // Add typing effect to dialogue (optional enhancement)
+        window.addEventListener('load', function() {
+            const dialogue = document.getElementById('dialogue');
+            dialogue.classList.add('typing');
+            setTimeout(() => {
+                dialogue.classList.remove('typing');
+            }, 3000);
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'974c370d61d44a9d',t:'MTc1NjEzNjcxMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
